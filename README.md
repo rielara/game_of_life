@@ -10,6 +10,10 @@ This is a simple implementation of Conway's Game of Life in vanilla JavaScript. 
 
 <div align="center">
 
+<a href="https://zesty-alfajores-1ef0e9.netlify.app/"><img src="https://img.shields.io/badge/-Click here to see it live-e9e3e6?style=for-the-badge"/></a>
+
+</div>
+
 ![Untitled](https://github.com/rielara/game_of_life/assets/78863735/fa22b8ef-c2b2-4010-81da-8917df1064a9)
 
 </div>
