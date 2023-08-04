@@ -1,0 +1,128 @@
+<html>
+
+<head>
+    <title>Conway's Game of Life</title>
+    <style>
+        body{
+            background-color: #f194e3;  
+        }
+
+        .cell {
+            width: 10px;
+            height: 10px;
+        }
+
+        .filled {
+            background-color: white;
+        }
+
+        .empty {
+            background-color: #f194e3;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="field">
+    </table>
+    <script>
+        var field = document.getElementById("field");
+        var fieldSize = 50; 
+        var fieldArray = [];
+        var EMPTY = 0;
+        var ALIVE = 1;
+
+        function createField() {
+            for (var i = 0; i < fieldSize; i++) {
+                var row = field.insertRow(i);
+                fieldArray[i] = [];
+
+                for (var j = 0; j < fieldSize; j++) {
+                    var cell = row.insertCell(j);
+                    fieldArray[i][j] = { status: EMPTY, cell: cell };
+                    cell.className = "cell empty";
+                }
+            }
+        }
+
+        function randomizeField() {
+            for (var i = 0; i < Math.floor(fieldSize * fieldSize * 0.3); i++) {
+                var x, y;
+                do {
+                    x = Math.floor(Math.random() * fieldSize);
+                    y = Math.floor(Math.random() * fieldSize);
+                } while (fieldArray[x][y].status === ALIVE);
+                fieldArray[x][y].status = ALIVE;
+                fieldArray[x][y].cell.className = "cell filled";
+            }
+        }
+
+        function countAliveNeighbors(x, y) {
+            var count = 0;
+            for (var i = -1; i <= 1; i++) {
+                for (var j = -1; j <= 1; j++) {
+                    if (i === 0 && j === 0) continue;
+                    var newX = x + i;
+                    var newY = y + j;
+                    if (newX >= 0 && newX < fieldSize && newY >= 0 && newY < fieldSize) {
+                        if (fieldArray[newX][newY].status === ALIVE) {
+                            count++;
+                        }
+                    }
+                }
+            }
+            return count;
+        }
+
+        function updateField() {
+            var newField = [];
+            for (var i = 0; i < fieldSize; i++) {
+                newField[i] = [];
+                for (var j = 0; j < fieldSize; j++) {
+                    var aliveNeighbors = countAliveNeighbors(i, j);
+                    if (fieldArray[i][j].status === ALIVE) {
+                        if (aliveNeighbors < 2 || aliveNeighbors > 3) {
+                            newField[i][j] = { status: EMPTY, cell: fieldArray[i][j].cell };
+                        } else {
+                            newField[i][j] = { status: ALIVE, cell: fieldArray[i][j].cell };
+                        }
+                    } else {
+                        if (aliveNeighbors === 3) {
+                            newField[i][j] = { status: ALIVE, cell: fieldArray[i][j].cell };
+                        } else {
+                            newField[i][j] = { status: EMPTY, cell: fieldArray[i][j].cell };
+                        }
+                    }
+                }
+            }
+            fieldArray = newField;
+            updateCellStyles();
+        }
+
+
+        function updateCellStyles() {
+            for (var i = 0; i < fieldSize; i++) {
+                for (var j = 0; j < fieldSize; j++) {
+                    var cell = fieldArray[i][j].cell;
+                    if (fieldArray[i][j].status === ALIVE) {
+                        cell.className = "cell filled";
+                    } else {
+                        cell.className = "cell empty";
+                    }
+                }
+            }
+        }
+
+        function init() {
+            createField();
+            randomizeField();
+            setInterval(function () {
+                updateField();
+            }, 80);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
