@@ -10,7 +10,6 @@ This is a simple implementation of Conway's Game of Life in vanilla JavaScript. 
 
 <div align="center">
 
-![Gospers_glider_gun](https://github.com/rielara/game_of_life/assets/78863735/974b77f5-adce-4370-9525-cf96ae87aa27)
-
+![Untitled](https://github.com/rielara/game_of_life/assets/78863735/fa22b8ef-c2b2-4010-81da-8917df1064a9)
 
 </div>
