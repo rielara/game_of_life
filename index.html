@@ -1,10 +1,31 @@
+<!DOCTYPE html>
 <html>
 
 <head>
     <title>Conway's Game of Life</title>
     <style>
-        body{
-            background-color: #f194e3;  
+        body {
+            background-color: #282827;
+            font-family: Arial;
+            text-decoration: solid;
+            font-weight: 800;
+        }
+
+        #stats {
+            text-align: left;
+            top: 10px;
+            color: rgb(26, 23, 23);
+            left: 10px;
+            margin-bottom: 10px;
+            background-color: #e9e3e6;
+            padding: 10px;
+            max-width: 200px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+
+
         }
 
         .cell {
@@ -13,24 +34,34 @@
         }
 
         .filled {
-            background-color: white;
+            background-color: #e9e3e6;
         }
 
         .empty {
-            background-color: #f194e3;
+            background-color: #282827;
         }
     </style>
 </head>
 
 <body>
+    <div id="stats">
+        <p>Generation: <span id="generation">0</span></p>
+        <p>Alive Cells: <span id="aliveCells">0</span></p>
+        <p>Dead Cells: <span id="deadCells">0</span></p>
+    </div>
     <table id="field">
     </table>
+
     <script>
         var field = document.getElementById("field");
-        var fieldSize = 50; 
+        var fieldSize = 100;
         var fieldArray = [];
         var EMPTY = 0;
         var ALIVE = 1;
+
+        var generationCount = 0;
+        var aliveCellCount = 0;
+        var deadCellCount = 0;
 
         function createField() {
             for (var i = 0; i < fieldSize; i++) {
@@ -83,6 +114,7 @@
                     if (fieldArray[i][j].status === ALIVE) {
                         if (aliveNeighbors < 2 || aliveNeighbors > 3) {
                             newField[i][j] = { status: EMPTY, cell: fieldArray[i][j].cell };
+                            deadCellCount++; //
                         } else {
                             newField[i][j] = { status: ALIVE, cell: fieldArray[i][j].cell };
                         }
@@ -91,14 +123,15 @@
                             newField[i][j] = { status: ALIVE, cell: fieldArray[i][j].cell };
                         } else {
                             newField[i][j] = { status: EMPTY, cell: fieldArray[i][j].cell };
+                            deadCellCount--;
                         }
                     }
                 }
             }
             fieldArray = newField;
             updateCellStyles();
+            updateStatistics();
         }
-
 
         function updateCellStyles() {
             for (var i = 0; i < fieldSize; i++) {
@@ -113,12 +146,30 @@
             }
         }
 
+        function updateStatistics() {
+            generationCount++;
+            aliveCellCount = 0;
+
+            for (var i = 0; i < fieldSize; i++) {
+                for (var j = 0; j < fieldSize; j++) {
+                    if (fieldArray[i][j].status === ALIVE) {
+                        aliveCellCount++;
+                    }
+                }
+            }
+
+            document.getElementById("generation").textContent = generationCount;
+            document.getElementById("aliveCells").textContent = aliveCellCount;
+            document.getElementById("deadCells").textContent = deadCellCount;
+        }
+
         function init() {
             createField();
             randomizeField();
+            updateStatistics();
             setInterval(function () {
                 updateField();
-            }, 80);
+            }, 200);
         }
 
         init();
